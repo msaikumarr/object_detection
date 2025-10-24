@@ -58,3 +58,23 @@ Notes:
 If you want a one-click public demo, push this repository to GitHub and use Streamlit Community Cloud (recommended for quick demos). Point Streamlit Cloud to `src/app.py` as the app entrypoint.
 
 For a container-based deploy (Render, Heroku, Docker), I can add a simple Dockerfile and instructions — tell me which you prefer.
+
+### Deploying with Netlify (recommended proxy flow)
+
+Netlify cannot run a long-lived Streamlit server directly. The recommended approach is:
+
+1. Deploy the Streamlit app (container) to a container host (Render, Railway, Fly, Heroku, etc.) and note the public URL such as `https://your-backend.example.com`.
+2. Use Netlify to serve a small static landing site and proxy all requests to the backend URL. The repo includes a `public/index.html` and `netlify.toml` with a proxy redirect rule.
+
+Quick steps:
+
+- Edit `public/index.html` and `netlify.toml` and replace `https://YOUR_BACKEND_URL_HERE` with your backend URL from step (1).
+- Commit and push to GitHub.
+- On Netlify: New site → Import from GitHub → choose this repo.
+    - Base directory: leave blank
+    - Build command: leave blank
+    - Publish directory: `public`
+
+Netlify will publish the static site and proxy incoming requests to your Streamlit backend.
+
+If you'd like a proxy that reads the backend URL from Netlify environment variables (so you don't have to commit it into the repo), I can scaffold a small Netlify Function (serverless) to forward requests to `process.env.BACKEND_URL` instead — tell me if you want that.

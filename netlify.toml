@@ -1,0 +1,10 @@
+[build]
+  publish = "public"
+
+[[redirects]]
+  # Proxy all requests to your backend Streamlit app. Replace the backend URL below
+  # with the URL where you deploy the Docker container (e.g. on Render or Railway).
+  from = "/*"
+  to = "https://YOUR_BACKEND_URL_HERE/:splat"
+  status = 200
+  force = true
